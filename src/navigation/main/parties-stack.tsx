@@ -1,20 +1,20 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import Home from '../../screens/main/Home';
+import AllParties from '../../screens/main/parties/all-parties';
 
 type Props = {};
 
-const HomeStack = (props: Props) => {
+const PartiesStack = (props: Props) => {
 	const { Navigator, Screen } = createNativeStackNavigator();
 
 	return (
 		<Navigator
 			screenOptions={{ headerShown: false }}
-			initialRouteName="Home"
+			initialRouteName="AllParties"
 		>
-			<Screen name="Home" component={Home} />
+			<Screen name="AllParties" component={AllParties} />
 		</Navigator>
 	);
 };
 
-export default HomeStack;
+export default PartiesStack;
