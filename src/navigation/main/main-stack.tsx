@@ -3,13 +3,13 @@ import {
 	createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { IconButton, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
 import BillStack from './bills-stack';
 import ItemStack from './items-stack';
 import LoanStack from './loans-stack';
 import MoreStack from './more-stack';
 import PartiesStack from './parties-stack';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const RenderTabBarIcon = ({
 	focused,
