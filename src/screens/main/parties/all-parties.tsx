@@ -3,14 +3,14 @@ import React from 'react';
 
 type Props = {};
 
-const Home = (props: Props) => {
+const AllParties = (props: Props) => {
 	return (
 		<View>
-			<Text>Home</Text>
+			<Text>AllParties</Text>
 		</View>
 	);
 };
 
-export default Home;
+export default AllParties;
 
 const styles = StyleSheet.create({});
