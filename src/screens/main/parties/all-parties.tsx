@@ -11,14 +11,15 @@ const routes = [
 	{
 		key: 'customers',
 		title: 'Customers',
-		component: () => <PartiesView type="customers" />,
+		component: () => <PartiesView type="CUSTOMER" />,
 	},
 	{
 		key: 'suppliers',
 		title: 'Suppliers',
-		component: () => <PartiesView type="suppliers" />,
+		component: () => <PartiesView type="SUPPLIER" />,
 	},
 ];
+
 const AllParties = (props: Props) => {
 	const theme = useTheme();
 	const styles = makeStyles(theme);
