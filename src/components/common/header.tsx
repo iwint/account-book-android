@@ -59,38 +59,39 @@ const Header: React.FC<HeaderProps> = ({
 					icon={(props) => (
 						<Icon
 							{...props}
-							color={theme.colors.text}
+							color={color ? color : theme.colors.text}
 							name={
 								leftActionIcon
 									? leftActionIcon
-									: 'chevron-back-outline'
+									: 'arrow-back-outline'
 							}
 						/>
 					)}
 					onPress={handleLeftAction}
 				/>
 			)}
-			{profileData?.image != null ? (
-				<Avatar.Image
-					source={profileData?.image}
-					style={{ backgroundColor: '#fff', marginLeft: 10 }}
-					size={35}
-				/>
-			) : (
-				<Avatar.Icon
-					icon={(props) => (
-						<Icon
-							onPress={() => {}}
-							{...props}
-							size={24}
-							color={theme.colors.text}
-							name={'person-outline'}
-						/>
-					)}
-					style={{ backgroundColor: '#fff', marginLeft: 10 }}
-					size={35}
-				/>
-			)}
+			{profileData &&
+				(profileData?.image != null ? (
+					<Avatar.Image
+						source={profileData?.image}
+						style={{ backgroundColor: '#fff', marginLeft: 10 }}
+						size={35}
+					/>
+				) : (
+					<Avatar.Icon
+						icon={(props) => (
+							<Icon
+								onPress={() => {}}
+								{...props}
+								size={24}
+								color={theme.colors.text}
+								name={'person-outline'}
+							/>
+						)}
+						style={{ backgroundColor: '#fff', marginLeft: 10 }}
+						size={35}
+					/>
+				))}
 
 			<Appbar.Content
 				titleStyle={{

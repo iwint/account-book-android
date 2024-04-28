@@ -32,7 +32,9 @@ export interface ThemeProps {
         sub_text: string,
         success: string,
         warning: string,
-        error: string
+        error: string,
+        error_bg: string,
+        success_bg: string
     };
     dimensions: {
         width: number;
@@ -95,6 +97,8 @@ export const theme: ThemeProps = {
         text: "#0A1333",
         warning: "#FF7A19",
         sub_text: "#9EA9D1",
+        error_bg: '#FDE9E7',
+        success_bg: '#D1FAE5'
     },
 
     dimensions: {
