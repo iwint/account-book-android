@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import Login from '../../screens/auth/Login';
+import Login from '../../screens/auth/login';
+import Register from '../../screens/auth/register';
 
 type Props = {};
 
@@ -13,7 +14,7 @@ const AuthStack = (props: Props) => {
 				options={{
 					headerShown: false,
 				}}
-				component={Login}
+				component={Register}
 			/>
 		</Navigator>
 	);

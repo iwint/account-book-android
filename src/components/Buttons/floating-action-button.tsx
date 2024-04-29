@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { ButtonProps, FAB } from 'react-native-paper';
-import { theme } from '../../theme';
 import Button, { CustomButtonProps } from './button';
 
 type FloatingActionButtonProps = {} & CustomButtonProps;
