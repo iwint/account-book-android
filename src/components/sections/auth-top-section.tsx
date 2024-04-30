@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 
 const AuthTopSection = ({
@@ -10,20 +10,7 @@ const AuthTopSection = ({
 	console.log(Content);
 
 	return (
-		<View
-			style={[
-				{
-					width: '100%',
-					justifyContent: 'center',
-					alignItems: 'flex-start',
-					paddingHorizontal: 20,
-					paddingTop: 20,
-					backgroundColor: dark ? '#000' : '#fff',
-					height: 'auto',
-					borderRadius: 20,
-				},
-			]}
-		>
+		<View style={styles.container}>
 			<Text
 				style={{
 					fontWeight: 'bold',
@@ -49,3 +36,15 @@ const AuthTopSection = ({
 };
 
 export default AuthTopSection;
+
+const styles = StyleSheet.create({
+	container: {
+		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		paddingHorizontal: 20,
+		paddingTop: 20,
+		height: 'auto',
+		borderRadius: 20,
+	},
+});
