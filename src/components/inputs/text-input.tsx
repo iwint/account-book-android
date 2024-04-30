@@ -30,7 +30,6 @@ const Input: React.FC<InputProps> = ({
 	...props
 }) => {
 	const styles = makeStyles(theme);
-
 	return (
 		<View style={{ width: 'auto', height: 'auto' }}>
 			{label && <Text style={styles.label}>{label}</Text>}
