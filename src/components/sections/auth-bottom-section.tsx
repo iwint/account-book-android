@@ -1,42 +1,57 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
-import { Pressable } from 'react-native';
-import Input from '../inputs/text-input';
-import Button from '../buttons/button';
+import React from 'react';
+import {
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { theme } from '../../theme';
+import Button from '../buttons/button';
+import Input from '../inputs/text-input';
+import { Controller } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
 
-const BottomSection = ({
+interface BottomSectionProps {
+	formData: any;
+	type: string;
+	handleSubmit: any;
+	control: any;
+	errors: any;
+}
+
+const BottomSection: React.FC<BottomSectionProps> = ({
 	formData,
 	type,
 	handleSubmit,
-	handleNavigation,
-}: any) => {
+	control,
+	errors,
+}) => {
+	const navigation = useNavigation();
 	return (
-		<View
-			style={{
-				width: '100%',
-				gap: 5,
-				alignItems: 'center',
-				justifyContent: 'center',
-				paddingHorizontal: 20,
-				paddingBottom: 20,
-			}}
-		>
+		<View style={styles.container}>
 			{/* {type === 'sign_in' ? <Onboard2 /> : null} */}
 			{formData?.map((inputField: any, index: number) => {
 				return (
-					<Input
-						key={index}
-						icon={{
-							name: inputField?.icon,
-							size: 20,
-						}}
-						label={inputField?.label}
-						onChange={(val) => {
-							inputField?.onChange(val);
-						}}
-						placeholder={inputField?.placeholder}
-						value={inputField?.value}
+					<Controller
+						name={inputField?.name}
+						control={control}
+						render={({ field: { onChange, onBlur, value } }) => (
+							<Input
+								error={errors[inputField?.name]}
+								key={index}
+								icon={{
+									name: inputField?.icon,
+									size: 20,
+								}}
+								label={inputField?.label}
+								onChange={(val) => {
+									onChange(val);
+								}}
+								onBlur={onBlur}
+								placeholder={inputField?.placeholder}
+								value={value}
+							/>
+						)}
 					/>
 				);
 			})}
@@ -45,23 +60,12 @@ const BottomSection = ({
 				onPress={handleSubmit}
 				title={type === 'sign_up' ? 'Register' : 'Sign in'}
 			/>
-			<View
-				style={[
-					{
-						gap: 5,
-						width: '100%',
-						marginTop: '2%',
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'center',
-					},
-				]}
-			>
+			<View style={styles.bottomSectionWrapper}>
 				<Text>Don't have account ?</Text>
 				<TouchableOpacity
 					onPressIn={() => {
 						console.log('SIGN IN');
-						handleNavigation.navigate('Login', {
+						navigation.getParent()?.navigate('Login', {
 							type: type === 'sign_up' ? 'sign_in' : 'sign_up',
 						});
 					}}
@@ -83,3 +87,22 @@ const BottomSection = ({
 };
 
 export default BottomSection;
+
+const styles = StyleSheet.create({
+	container: {
+		width: '100%',
+		gap: 5,
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingHorizontal: 20,
+		paddingBottom: 20,
+	},
+	bottomSectionWrapper: {
+		gap: 5,
+		width: '100%',
+		marginTop: '2%',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+});

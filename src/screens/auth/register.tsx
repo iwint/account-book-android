@@ -10,7 +10,23 @@ import {
 	UserRegisterPayload,
 } from '../../@types/user';
 import useAppStore from '../../store/app-store';
+import {
+	FieldValues,
+	SubmitHandler,
+	useForm,
+} from 'react-hook-form';
 
+const signInData = {
+	username: '',
+	password: '',
+};
+const signUpData = {
+	username: '',
+	phone: '',
+	shopname: '',
+	password: '',
+	image: '',
+};
 interface RegisterScreenProps
 	extends NativeStackScreenProps<any> {}
 
@@ -24,10 +40,18 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 		)?.params?.type;
 	console.log(type);
 
-	const [authData, setAuthData] = useState<
-		UserRegisterPayload | UserLoginPayload | any
-	>();
 	const { authenticateUser, user } = useAppStore();
+
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<
+		UserRegisterPayload | UserLoginPayload | FieldValues
+	>({
+		defaultValues: type === 'sign_up' ? signUpData : signInData,
+	});
+
 	const Content = {
 		title: type != 'sign_up' ? 'Welcome Back!' : 'Sign Up',
 		description:
@@ -35,32 +59,6 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 				? 'Sign In to your account'
 				: 'Create account and enjoy all services',
 	};
-	const signInData = {
-		username: '',
-		password: '',
-	};
-	const signUpData = {
-		username: '',
-		phone: '',
-		shopname: '',
-		password: '',
-		image: '',
-	};
-
-	const handleChange = (key: string, val: string) => {
-		setAuthData({
-			...(authData as UserRegisterPayload | UserLoginPayload),
-			[key]: val,
-		});
-	};
-
-	useEffect(() => {
-		if (type === 'sign_in') {
-			setAuthData(signInData);
-		} else {
-			setAuthData(signUpData);
-		}
-	}, [type]);
 
 	const signInForm = [
 		{
@@ -68,16 +66,12 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 			placeholder: 'Enter your username',
 			icon: 'person-outline',
 			type: 'text',
-			value: authData?.username,
-			onChange: (val: string) => handleChange('username', val),
 		},
 		{
 			label: 'Password',
 			placeholder: 'Enter your password',
 			icon: 'eye-outline',
 			type: 'text',
-			value: authData?.password,
-			onChange: (val: string) => handleChange('password', val),
 		},
 	];
 	const signUpForm = [
@@ -86,55 +80,39 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 			placeholder: 'Enter your username',
 			icon: 'person-outline',
 			type: 'text',
-			value: authData?.username,
-			onChange: (val: string) => handleChange('username', val),
 		},
 		{
 			label: 'Password',
 			placeholder: 'Enter your password',
 			icon: 'eye-outline',
 			type: 'text',
-			value: authData?.password,
-			onChange: (val: string) => handleChange('password', val),
 		},
 		{
 			label: 'Shop Name',
 			placeholder: 'Enter your shop name',
 			icon: 'home-outline',
-			value: authData?.shopname,
 			type: 'email',
-			onChange: (val: string) => {
-				setAuthData({
-					...(authData as UserRegisterPayload),
-					shopname: val,
-				});
-			},
 		},
 		{
 			label: 'Mobile',
 			placeholder: 'Enter your mobile number',
 			icon: 'call-outline',
 			type: 'numeric',
-			value: authData?.phone,
-			onChange: (val: string) => {
-				setAuthData({
-					...authData,
-					mobile: val,
-				});
-			},
 		},
 	];
 
-	const handleSubmit = async () => {};
-
+	const OnSubmit: SubmitHandler<FieldValues> = async (
+		data,
+	) => {};
 	return (
 		<View style={styles.container}>
 			<View style={styles.wrapperContainer}>
 				<AuthTopSection Content={Content} type={type} />
 				<BottomSection
+					control={control}
+					errors={errors}
 					type={type}
-					handleNavigation={props.navigation}
-					handleSubmit={handleSubmit}
+					handleSubmit={handleSubmit(OnSubmit)}
 					formData={type === 'sign_up' ? signUpForm : signInForm}
 				/>
 			</View>
