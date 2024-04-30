@@ -9,6 +9,7 @@ import {
 	UserLoginPayload,
 	UserRegisterPayload,
 } from '../../@types/user';
+import useAppStore from '../../store/app-store';
 
 interface RegisterScreenProps
 	extends NativeStackScreenProps<any> {}
@@ -26,6 +27,7 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 	const [authData, setAuthData] = useState<
 		UserRegisterPayload | UserLoginPayload | any
 	>();
+	const { authenticateUser, user } = useAppStore();
 	const Content = {
 		title: type != 'sign_up' ? 'Welcome Back!' : 'Sign Up',
 		description:
@@ -123,36 +125,7 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 		},
 	];
 
-	const handleSubmit = async () => {
-		// if (
-		// 	(type === 'sign_up' &&
-		// 		authData?.name != '' &&
-		// 		authData?.email != '' &&
-		// 		authData?.mobile != '') ||
-		// 	(type === 'sign_in' && authData?.mobile != '')
-		// ) {
-		// 	ToastAndroid.show(
-		// 		`${
-		// 			type === 'sign_in'
-		// 				? 'Sign in sucessfully done'
-		// 				: 'Sign up sucessfully done'
-		// 		}`,
-		// 		ToastAndroid.SHORT,
-		// 	);
-		// 	props.navigation.navigate({
-		// 		name: 'Otp',
-		// 		params: {
-		// 			mobile: authData?.mobile,
-		// 		},
-		// 	});
-		// 	console.log(props.navigation);
-		// } else {
-		// 	ToastAndroid.show(
-		// 		'Please fill all fields',
-		// 		ToastAndroid.SHORT,
-		// 	);
-		// }
-	};
+	const handleSubmit = async () => {};
 
 	return (
 		<View style={styles.container}>
