@@ -1,7 +1,8 @@
 import React from 'react';
-import { DefaultTheme, PaperProvider } from 'react-native-paper';
+import { PaperProvider } from 'react-native-paper';
 import MainNavigator from './navigation';
 import { theme } from './theme';
+import { NavigationContainer } from '@react-navigation/native';
 
 declare global {
 	namespace ReactNativePaper {
@@ -37,7 +38,9 @@ declare global {
 function App(): React.JSX.Element {
 	return (
 		<PaperProvider theme={theme}>
-			<MainNavigator />
+			<NavigationContainer>
+				<MainNavigator />
+			</NavigationContainer>
 		</PaperProvider>
 	);
 }

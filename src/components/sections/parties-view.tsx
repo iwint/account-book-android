@@ -1,13 +1,17 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import AnalyticsView from './analytics-view';
 import { ThemeProp } from 'react-native-paper/lib/typescript/types';
 import { useTheme } from 'react-native-paper';
 import FloatingActionButton from '../buttons/floating-action-button';
-import { useNavigation } from '@react-navigation/native';
+import {
+	useFocusEffect,
+	useNavigation,
+} from '@react-navigation/native';
 import PartyCard from '../cards/party-card';
 import Input from '../inputs/text-input';
 import EmptyResult from './empty-result';
+import useAppStore from '../../store/app-store';
 
 interface PartiesViewProps {
 	type: 'CUSTOMER' | 'SUPPLIER';
@@ -43,6 +47,8 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 	const theme = useTheme();
 	const styles = makeStyles(theme);
 	const navigation = useNavigation();
+	const { getAllStatistics, statistics, user, getUserData } =
+		useAppStore();
 	const handleAddParty = () => {
 		navigation.getParent()?.navigate('AddParty', { type });
 	};
@@ -51,10 +57,28 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 		navigation.getParent()?.navigate('SingleParty', { data });
 	};
 
+	useFocusEffect(
+		useCallback(() => {
+			getUserData().then((payload) => {
+				getAllStatistics(payload?.data._id, type);
+			});
+		}, [type]),
+	);
+
+	console.log('STATISTICS', statistics);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.analyticsViewWrapper}>
-				<AnalyticsView type={type} />
+				<AnalyticsView
+					data={
+						statistics[
+							type === 'CUSTOMER'
+								? 'customers_statistics'
+								: 'suppliers_statistics'
+						]
+					}
+				/>
 			</View>
 			<FloatingActionButton
 				title={
