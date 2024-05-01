@@ -1,20 +1,18 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { ToastAndroid } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import BottomSection from '../../components/sections/auth-bottom-section';
-import AuthTopSection from '../../components/sections/auth-top-section';
-import {
-	UserLoginPayload,
-	UserRegisterPayload,
-} from '../../@types/user';
-import useAppStore from '../../store/app-store';
+import React from 'react';
 import {
 	FieldValues,
 	SubmitHandler,
 	useForm,
 } from 'react-hook-form';
+import { StyleSheet, ToastAndroid, View } from 'react-native';
+import {
+	UserLoginPayload,
+	UserRegisterPayload,
+} from '../../@types/user';
+import BottomSection from '../../components/sections/auth-bottom-section';
+import AuthTopSection from '../../components/sections/auth-top-section';
+import useAppStore from '../../store/app-store';
 
 const signInData = {
 	username: '',
@@ -27,10 +25,9 @@ const signUpData = {
 	password: '',
 	image: '',
 };
-interface RegisterScreenProps
-	extends NativeStackScreenProps<any> {}
+interface AuthScreenProps extends NativeStackScreenProps<any> {}
 
-const Register: React.FC<RegisterScreenProps> = (props) => {
+const Auth: React.FC<AuthScreenProps> = (props) => {
 	const type = props.navigation
 		.getState()
 		.routes.find(
@@ -44,6 +41,7 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 
 	const {
 		control,
+		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<
@@ -62,53 +60,75 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 
 	const signInForm = [
 		{
-			label: 'Username',
-			placeholder: 'Enter your username',
-			icon: 'person-outline',
-			type: 'text',
-		},
-		{
-			label: 'Password',
-			placeholder: 'Enter your password',
-			icon: 'eye-outline',
-			type: 'text',
-		},
-	];
-	const signUpForm = [
-		{
-			label: 'Username',
-			placeholder: 'Enter your username',
-			icon: 'person-outline',
-			type: 'text',
-		},
-		{
-			label: 'Password',
-			placeholder: 'Enter your password',
-			icon: 'eye-outline',
-			type: 'text',
-		},
-		{
-			label: 'Shop Name',
-			placeholder: 'Enter your shop name',
-			icon: 'home-outline',
-			type: 'email',
-		},
-		{
+			name: 'phone',
 			label: 'Mobile',
 			placeholder: 'Enter your mobile number',
 			icon: 'call-outline',
 			type: 'numeric',
+			required: true,
+		},
+		{
+			name: 'password',
+			label: 'Password',
+			placeholder: 'Enter your password',
+			icon: 'eye-outline',
+			type: 'text',
+			required: true,
+		},
+	];
+	const signUpForm = [
+		{
+			name: 'username',
+			label: 'Username',
+			placeholder: 'Enter your username',
+			icon: 'person-outline',
+			type: 'text',
+			required: true,
+		},
+		{
+			name: 'password',
+			label: 'Password',
+			placeholder: 'Enter your password',
+			icon: 'eye-outline',
+			type: 'password',
+			required: true,
+		},
+		{
+			name: 'shopname',
+			label: 'Shop Name',
+			placeholder: 'Enter your shop name',
+			icon: 'home-outline',
+			type: 'email',
+			required: true,
+		},
+		{
+			name: 'phone',
+			label: 'Mobile',
+			placeholder: 'Enter your mobile number',
+			icon: 'call-outline',
+			type: 'numeric',
+			required: true,
 		},
 	];
 
-	const OnSubmit: SubmitHandler<FieldValues> = async (
-		data,
-	) => {};
+	const OnSubmit: SubmitHandler<FieldValues> = async (data) => {
+		await authenticateUser(
+			type === 'sign_up' ? 'auth/register' : 'auth/login',
+			data as UserRegisterPayload | UserLoginPayload,
+		).then((res: any) => {
+			console.log('RESSS', res);
+		});
+		props.navigation.reset({
+			index: 0,
+			routes: [{ name: 'MainStack' }],
+		});
+	};
 	return (
 		<View style={styles.container}>
 			<View style={styles.wrapperContainer}>
 				<AuthTopSection Content={Content} type={type} />
 				<BottomSection
+					register={register}
 					control={control}
 					errors={errors}
 					type={type}
@@ -120,7 +140,7 @@ const Register: React.FC<RegisterScreenProps> = (props) => {
 	);
 };
 
-export default Register;
+export default Auth;
 
 const styles = StyleSheet.create({
 	container: {

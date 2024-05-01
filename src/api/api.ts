@@ -1,72 +1,108 @@
-import { trackPromise } from "react-promise-tracker"
 import { ROUTE_BASE_URL } from '@env'
-import { Routes } from "./request.type"
 import axios from "axios"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { ToastAndroid } from "react-native"
+import { trackPromise } from "react-promise-tracker"
+import { getAuthToken } from "../utils/storage-funtions"
+import { Routes } from "./request.type"
 
 
 const BASE_URL = `${ROUTE_BASE_URL}/api/v1`
-const token = AsyncStorage.getItem('token')
+
 
 const headers = {
     'Content-Type': 'application/json',
     "Access-Control-Allow-Origin": '*',
     'Accept': 'application/json',
-    Authorization: `Bearer ${token}`
 }
 
 
-export const GET_API = (endpoint: Routes) => {
+export const GET_API = async (endpoint: Routes) => {
+    const token = await getAuthToken()
+    console.log("TOKEN", token);
+
     return trackPromise(new Promise((resolve, reject) => {
         axios.get(`${BASE_URL}/${endpoint}`, {
-            headers: headers
+            headers: {
+                ...headers,
+                'Authorization': `Bearer ${token}`,
+            }
         }).then(res => {
-            if (res.status === 201 || res.status === 200) {
+            console.log(headers);
+
+            if (res.data?.status === 'ok') {
                 resolve(res.data)
             } else {
                 reject(res)
             }
-        }).catch(err => reject(err))
+            if (res?.data?.message) {
+                ToastAndroid.show(res?.data?.message, ToastAndroid.SHORT)
+            }
+        }).catch(err => {
+            console.log("GET REQUEST ERROR=>>>", err);
+            reject(err)
+        }
+        )
     }))
 }
 
 export const POST_API = async (endpoint: string, data: any) => {
+    const token = await getAuthToken()
     return trackPromise(new Promise((resolve, reject) => {
         axios.post(`${BASE_URL}/${endpoint}`, data, {
-            headers: headers
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${token}`
+            }
         }).then(res => {
-            if (res.status === 200 || res.status === 201) {
+            if (res.data?.status === 'ok') {
                 resolve(res.data)
             } else {
                 reject(res)
+            }
+            if (res?.data?.message) {
+                ToastAndroid.show(res?.data?.message, ToastAndroid.SHORT)
             }
         }).catch(err => reject(err))
     }))
 }
 
-export const PUT_API = (endpoint: Routes, data: any) => {
+export const PUT_API = async (endpoint: Routes, data: any) => {
+    const token = await getAuthToken()
     return trackPromise(new Promise((resolve, reject) => {
         axios.put(`${BASE_URL}/${endpoint}`, data, {
-            headers: headers
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${token}`
+            }
         }).then(res => {
-            if (res.status === 201 || res.status === 200) {
+            if (res.data?.status === 'ok') {
                 resolve(res.data)
             } else {
                 reject(res)
+            }
+            if (res?.data?.message) {
+                ToastAndroid.show(res?.data?.message, ToastAndroid.SHORT)
             }
         }).catch(err => reject(err))
     }))
 }
 
-export const DELETE_API = (endpoint: Routes) => {
+export const DELETE_API = async (endpoint: Routes) => {
+    const token = await getAuthToken()
     return trackPromise(new Promise((resolve, reject) => {
         axios.delete(`${BASE_URL}/${endpoint}`, {
-            headers: headers
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${token}`
+            }
         }).then(res => {
-            if (res.status === 201 || res.status === 200) {
+            if (res.data?.status === 'ok') {
                 resolve(res.data)
             } else {
                 reject(res)
+            }
+            if (res?.data?.message) {
+                ToastAndroid.show(res?.data?.message, ToastAndroid.SHORT)
             }
         }).catch(err => reject(err))
     }))

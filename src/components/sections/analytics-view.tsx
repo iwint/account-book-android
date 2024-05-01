@@ -2,8 +2,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { theme } from '../../theme';
 
+interface AnalyticsDataProps {
+	totalcredit: number;
+	totaldebit: number;
+}
+
 interface AnalyticsViewProps {
-	type: 'SUPPLIER' | 'CUSTOMER';
+	data: AnalyticsDataProps;
 }
 
 const AnalyticsView: React.FC<AnalyticsViewProps> = (props) => {

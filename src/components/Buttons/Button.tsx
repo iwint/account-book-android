@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
+	ActivityIndicator,
 	ButtonProps,
 	IconButton,
 	Button as RNPButton,
@@ -8,6 +9,7 @@ import {
 import { theme, ThemeProps } from '../../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
+import { usePromiseTracker } from 'react-promise-tracker';
 
 export type CustomButtonProps = {
 	title?: string;
@@ -22,6 +24,7 @@ const Button: React.FC<CustomButtonProps> = ({
 	icon,
 	...props
 }) => {
+	const { promiseInProgress } = usePromiseTracker();
 	const styles = makeStyles(theme);
 	const iconOptions = (iconName: string) => ({
 		width: 25,
@@ -82,7 +85,14 @@ const Button: React.FC<CustomButtonProps> = ({
 			mode="contained"
 			textColor={props.textColor ? props.textColor : '#ffff'}
 		>
-			{props.title}
+			{promiseInProgress ? (
+				<ActivityIndicator
+					color="#fff"
+					animating={promiseInProgress}
+				/>
+			) : (
+				props.title
+			)}
 		</RNPButton>
 	);
 };

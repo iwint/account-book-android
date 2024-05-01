@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
 	StyleSheet,
 	Text,
@@ -12,6 +12,9 @@ import {
 	SceneMap,
 } from 'react-native-tab-view';
 import { makeRenderScene } from '../../utils/make-render-scene';
+import useAppStore from '../../store/app-store';
+import { theme, ThemeProps } from '../../theme';
+import { useFocusEffect } from '@react-navigation/native';
 
 export interface TabDataProps {
 	key: string;
@@ -24,10 +27,10 @@ interface TabViewProps {
 }
 
 const TabView = ({ tabData }: TabViewProps) => {
-	const theme = useTheme();
 	const [index, setIndex] = React.useState(0);
 	const [routes] = React.useState(tabData);
 	const layout = useWindowDimensions();
+	const styles = makeStyles(theme);
 	const renderScene = SceneMap(makeRenderScene(tabData));
 
 	return (
@@ -38,17 +41,7 @@ const TabView = ({ tabData }: TabViewProps) => {
 				console.log(props.navigationState);
 
 				return (
-					<View
-						style={{
-							backgroundColor: theme.colors.primary,
-							width: '100%',
-							height: 50,
-							flexDirection: 'row',
-							alignItems: 'center',
-							gap: 10,
-							paddingHorizontal: 15,
-						}}
-					>
+					<View style={styles.container}>
 						{props.navigationState.routes.map((item, index) => (
 							<TouchableOpacity
 								style={{ marginRight: 10, gap: 5 }}
@@ -73,7 +66,7 @@ const TabView = ({ tabData }: TabViewProps) => {
 										borderTopStartRadius: 20,
 										backgroundColor:
 											props.navigationState.index === index
-												? theme.colors.warning
+												? theme.colors?.warning
 												: 'transparent',
 									}}
 								/>
@@ -92,4 +85,15 @@ const TabView = ({ tabData }: TabViewProps) => {
 
 export default TabView;
 
-const styles = StyleSheet.create({});
+const makeStyles = (theme: ThemeProps) =>
+	StyleSheet.create({
+		container: {
+			backgroundColor: theme.colors.primary,
+			width: '100%',
+			height: 50,
+			flexDirection: 'row',
+			alignItems: 'center',
+			gap: 10,
+			paddingHorizontal: 15,
+		},
+	});
