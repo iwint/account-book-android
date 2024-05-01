@@ -58,10 +58,8 @@ const Input: React.FC<InputProps> = ({
 						...styles.input,
 						textAlign: centeredValue ? 'center' : 'left',
 					}}
+					textContentType="password"
 					cursorColor={theme.colors.text}
-					allowFontScaling
-					scrollEnabled
-					textContentType="fullStreetAddress"
 					placeholder={placeholder}
 					value={value}
 					textColor={theme.colors.text}

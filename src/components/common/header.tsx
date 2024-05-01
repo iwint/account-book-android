@@ -52,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({
 
 	return (
 		<Appbar.Header
-			style={{ backgroundColor: backgroundColor, gap: 5 }}
+			style={{ backgroundColor: backgroundColor, gap: 10 }}
 		>
 			{(leftActionIcon || showBackAction) && (
 				<Appbar.Action

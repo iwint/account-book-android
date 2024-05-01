@@ -12,6 +12,7 @@ import { Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 
 interface BottomSectionProps {
+	register: any;
 	formData: any;
 	type: string;
 	handleSubmit: any;
@@ -25,6 +26,7 @@ const BottomSection: React.FC<BottomSectionProps> = ({
 	handleSubmit,
 	control,
 	errors,
+	register,
 }) => {
 	const navigation = useNavigation();
 	return (
@@ -33,25 +35,34 @@ const BottomSection: React.FC<BottomSectionProps> = ({
 			{formData?.map((inputField: any, index: number) => {
 				return (
 					<Controller
-						name={inputField?.name}
+						key={index}
+						name={inputField?.name || ''}
 						control={control}
-						render={({ field: { onChange, onBlur, value } }) => (
-							<Input
-								error={errors[inputField?.name]}
-								key={index}
-								icon={{
-									name: inputField?.icon,
-									size: 20,
-								}}
-								label={inputField?.label}
-								onChange={(val) => {
-									onChange(val);
-								}}
-								onBlur={onBlur}
-								placeholder={inputField?.placeholder}
-								value={value}
-							/>
-						)}
+						render={({ field: { onChange, onBlur, value } }) => {
+							return (
+								<Input
+									{...register(inputField.name, {
+										required: inputField.required ? true : false,
+									})}
+									secureTextEntry={
+										inputField.name === 'password' ? true : false
+									}
+									error={errors[inputField?.name]}
+									key={index}
+									icon={{
+										name: inputField?.icon,
+										size: 20,
+									}}
+									label={inputField?.label}
+									onChange={(val) => {
+										onChange(val.nativeEvent.text);
+									}}
+									onBlur={onBlur}
+									placeholder={inputField?.placeholder}
+									value={value}
+								/>
+							);
+						}}
 					/>
 				);
 			})}
