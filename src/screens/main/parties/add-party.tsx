@@ -1,4 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {
+	StyleSheet,
+	Text,
+	ToastAndroid,
+	View,
+} from 'react-native';
 import React, { useState } from 'react';
 import Header from '../../../components/common/header';
 import { TextInput, useTheme } from 'react-native-paper';
@@ -6,22 +11,34 @@ import { useHideBottomBar } from '../../../hooks/use-hide-bottom-bar';
 import Button from '../../../components/buttons/button';
 import RadioButton from '../../../components/buttons/radio-button';
 import { FieldValues, useForm } from 'react-hook-form';
+import useAppStore from '../../../store/app-store';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type Props = {};
+interface AddPartyProps extends NativeStackScreenProps<any> {}
 
-const AddParty = (props: Props) => {
+const AddParty: React.FC<AddPartyProps> = (props) => {
 	const theme = useTheme();
 	useHideBottomBar();
+	const { getStaticId, addParty, user } = useAppStore();
 	const [values, setValue] = useState({
-		who_are_they: '',
-		party_name: '',
-		phone_number: '',
+		type: '',
+		partyname: '',
+		phone: '',
 	});
 	const handleSetValue = (name: string, value: string) => {
 		setValue({ ...values, [name]: value });
 	};
-	const handleSubmit = () => {
-		console.log(values);
+	const handleSubmit = async () => {
+		let payload = {
+			...values,
+			staticsID: await getStaticId(
+				values.type as 'CUSTOMER' | 'SUPPLIER',
+			),
+		};
+		await addParty(user?._id, payload).then((res) => {
+			ToastAndroid.show(res?.message, ToastAndroid.SHORT);
+			props.navigation.goBack();
+		});
 	};
 
 	return (
@@ -35,15 +52,13 @@ const AddParty = (props: Props) => {
 			<View style={styles.contentWrapper}>
 				<TextInput
 					onChangeText={(text) =>
-						handleSetValue('party_name', text)
+						handleSetValue('partyname', text)
 					}
 					mode="outlined"
 					label={'Party Name'}
 				/>
 				<TextInput
-					onChangeText={(text) =>
-						handleSetValue('phone_number', text)
-					}
+					onChangeText={(text) => handleSetValue('phone', text)}
 					inputMode="numeric"
 					mode="outlined"
 					label={'Phone Number'}
@@ -53,26 +68,26 @@ const AddParty = (props: Props) => {
 					<RadioButton
 						label="Customer"
 						status={
-							values.who_are_they === 'customer'
+							values.type === 'CUSTOMER'
 								? 'checked'
 								: 'unchecked'
 						}
 						onPress={() => {
-							handleSetValue('who_are_they', 'customer');
+							handleSetValue('type', 'CUSTOMER');
 						}}
-						value="customer"
+						value="CUSTOMER"
 					/>
 					<RadioButton
 						onPress={() => {
-							handleSetValue('who_are_they', 'supplier');
+							handleSetValue('type', 'SUPPLIER');
 						}}
 						status={
-							values.who_are_they === 'supplier'
+							values.type === 'SUPPLIER'
 								? 'checked'
 								: 'unchecked'
 						}
 						label="Supplier"
-						value="supplier"
+						value="SUPPLIER"
 					/>
 				</View>
 			</View>

@@ -68,7 +68,7 @@ const PartyCard: React.FC<PartyCardProps> = ({
 							],
 					}}
 				>
-					₹300
+					₹{data?.amount || 0}
 				</Text>
 			</View>
 		</Pressable>

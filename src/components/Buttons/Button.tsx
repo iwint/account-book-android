@@ -17,11 +17,13 @@ export type CustomButtonProps = {
 	height?: number;
 	isIconButton?: boolean;
 	icon?: string | IconSource;
+	disablePromiseLoading?: boolean;
 } & Omit<ButtonProps, 'children'> &
 	Partial<Pick<ButtonProps, 'children'>>;
 
 const Button: React.FC<CustomButtonProps> = ({
 	icon,
+	disablePromiseLoading,
 	...props
 }) => {
 	const { promiseInProgress } = usePromiseTracker();
@@ -36,13 +38,8 @@ const Button: React.FC<CustomButtonProps> = ({
 	return props.isIconButton ? (
 		<View
 			style={{
-				elevation: 2,
 				backgroundColor: props.backgroundColor,
-				borderRadius: 10,
-				width: 42,
-				alignItems: 'center',
-				justifyContent: 'center',
-				height: 38,
+				...styles.iconContainer,
 			}}
 		>
 			<IconButton
@@ -54,12 +51,7 @@ const Button: React.FC<CustomButtonProps> = ({
 				}
 				onPress={props.onPress}
 				selected
-				style={{
-					borderRadius: 10,
-					height: '100%',
-					width: '100%',
-					margin: 0,
-				}}
+				style={styles.icon}
 			/>
 		</View>
 	) : (
@@ -74,7 +66,9 @@ const Button: React.FC<CustomButtonProps> = ({
 				props.style,
 			]}
 			icon={
-				typeof icon === 'string'
+				!disablePromiseLoading && promiseInProgress
+					? undefined
+					: typeof icon === 'string'
 					? iconOptions(icon as string)
 					: icon
 			}
@@ -85,7 +79,7 @@ const Button: React.FC<CustomButtonProps> = ({
 			mode="contained"
 			textColor={props.textColor ? props.textColor : '#ffff'}
 		>
-			{promiseInProgress ? (
+			{!disablePromiseLoading && promiseInProgress ? (
 				<ActivityIndicator
 					color="#fff"
 					animating={promiseInProgress}
@@ -104,5 +98,19 @@ const makeStyles = (theme: ThemeProps) =>
 		button: {
 			borderRadius: 12,
 			color: '#fff',
+		},
+		iconContainer: {
+			elevation: 2,
+			borderRadius: 10,
+			width: 42,
+			alignItems: 'center',
+			justifyContent: 'center',
+			height: 38,
+		},
+		icon: {
+			borderRadius: 10,
+			height: '100%',
+			width: '100%',
+			margin: 0,
 		},
 	});

@@ -38,8 +38,6 @@ const TabView = ({ tabData }: TabViewProps) => {
 			tabBarPosition="top"
 			animationEnabled
 			renderTabBar={(props) => {
-				console.log(props.navigationState);
-
 				return (
 					<View style={styles.container}>
 						{props.navigationState.routes.map((item, index) => (
