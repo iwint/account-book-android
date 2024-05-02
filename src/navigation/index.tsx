@@ -15,7 +15,7 @@ type Props = {};
 
 const MainNavigator = (props: Props) => {
 	const { Navigator, Screen } = createNativeStackNavigator();
-	let isAuthorized = false;
+	let isAuthorized = true;
 	const theme = useTheme();
 
 	// useFocusEffect(

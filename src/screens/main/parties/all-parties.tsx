@@ -25,7 +25,6 @@ const routes = [
 const AllParties = (props: Props) => {
 	const theme = useTheme();
 	const styles = makeStyles(theme);
-	console.log(theme.fonts);
 	const { user } = useAppStore();
 	return (
 		<View style={styles.container}>

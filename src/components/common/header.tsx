@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 interface HeaderProps {
 	showBackAction?: boolean;
 	rightActionIcon?: string;
-	title: string;
+	title: string | React.ReactNode;
 	rightActionOnPress?: () => void;
 	headerAction?: 'settings' | string;
 	rightSectionComponent?: React.ReactNode;
@@ -17,6 +17,7 @@ interface HeaderProps {
 	backgroundColor?: string;
 	color?: string;
 	profileData?: any;
+	rightIconColor?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -31,6 +32,7 @@ const Header: React.FC<HeaderProps> = ({
 	backgroundColor,
 	color,
 	profileData,
+	rightIconColor,
 }) => {
 	const navigation = useNavigation();
 
@@ -75,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({
 					<Avatar.Image
 						source={profileData?.image}
 						style={{ backgroundColor: '#fff', marginLeft: 10 }}
-						size={35}
+						size={38}
 					/>
 				) : (
 					<Avatar.Icon
@@ -89,7 +91,7 @@ const Header: React.FC<HeaderProps> = ({
 							/>
 						)}
 						style={{ backgroundColor: '#fff', marginLeft: 10 }}
-						size={35}
+						size={38}
 					/>
 				))}
 
@@ -99,14 +101,18 @@ const Header: React.FC<HeaderProps> = ({
 					fontWeight: 'bold',
 					fontSize: showBackAction ? 18 : 20,
 				}}
-				title={title}
+				title={title as string}
 			/>
 			{rightActionIcon && (
 				<Appbar.Action
 					icon={(props) => (
 						<Icon
 							{...props}
-							color={theme.colors.text}
+							color={
+								rightIconColor
+									? rightIconColor
+									: theme.colors.text
+							}
 							name={rightActionIcon}
 						/>
 					)}

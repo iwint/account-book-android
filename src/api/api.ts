@@ -6,6 +6,9 @@ import { getAuthToken } from "../utils/storage-funtions"
 import { Routes } from "./request.type"
 
 
+console.log("ROUTE_BASE_URL", ROUTE_BASE_URL);
+
+
 const BASE_URL = `${ROUTE_BASE_URL}/api/v1`
 
 
@@ -55,7 +58,7 @@ export const POST_API = async (endpoint: string, data: any) => {
             }
         }).then(res => {
             if (res.data?.status === 'ok') {
-                resolve(res.data)
+                resolve(res.data ? res.data : res)
             } else {
                 reject(res)
             }

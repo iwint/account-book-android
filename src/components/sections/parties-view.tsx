@@ -47,8 +47,14 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 	const theme = useTheme();
 	const styles = makeStyles(theme);
 	const navigation = useNavigation();
-	const { getAllStatistics, statistics, user, getUserData } =
-		useAppStore();
+	const {
+		getAllStatistics,
+		statistics,
+		user,
+		parties,
+		getUserData,
+		getAllParties,
+	} = useAppStore();
 	const handleAddParty = () => {
 		navigation.getParent()?.navigate('AddParty', { type });
 	};
@@ -61,11 +67,10 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 		useCallback(() => {
 			getUserData().then((payload) => {
 				getAllStatistics(payload?.data._id, type);
+				getAllParties(payload?.data._id, type);
 			});
 		}, [type]),
 	);
-
-	console.log('STATISTICS', statistics);
 
 	return (
 		<View style={styles.container}>
@@ -102,23 +107,33 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 			<View style={styles.cardListWrapper}>
 				<FlatList
 					ListEmptyComponent={<EmptyResult />}
-					data={dummyData.filter((i) => i.type === type)}
+					data={
+						parties[
+							type === 'CUSTOMER' ? 'customer' : 'supplier'
+						]
+					}
 					contentContainerStyle={{
 						gap: 5,
 						paddingHorizontal: 5,
 						paddingBottom: 60,
 					}}
-					renderItem={({ item, index }) => (
-						<PartyCard
-							key={index}
-							status={item.expensetype as any}
-							onPress={() => navigateToSingleParty(item as any)}
-							data={{
-								party_name: 'Iwin',
-								date: '2 weeks ago',
-							}}
-						/>
-					)}
+					renderItem={({ item, index }) => {
+						console.log('ITEM', item, parties);
+						return (
+							<PartyCard
+								key={index}
+								status={item.expensetype as any}
+								onPress={() =>
+									navigateToSingleParty(item as any)
+								}
+								data={{
+									party_name: item?.partyname,
+									date: item?.createdAt,
+									amount: item?.amount,
+								}}
+							/>
+						);
+					}}
 				/>
 			</View>
 		</View>
