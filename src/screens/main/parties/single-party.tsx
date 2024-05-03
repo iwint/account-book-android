@@ -49,6 +49,7 @@ const SingleParty: React.FC<SinglePartyProps> = (props) => {
 					onPress={() =>
 						props.navigation.navigate('AddTransaction', {
 							data: data,
+							type: 'DEBIT',
 						})
 					}
 				/>
@@ -62,6 +63,7 @@ const SingleParty: React.FC<SinglePartyProps> = (props) => {
 					onPress={() =>
 						props.navigation.navigate('AddTransaction', {
 							data: data,
+							type: 'CREDIT',
 						})
 					}
 				/>

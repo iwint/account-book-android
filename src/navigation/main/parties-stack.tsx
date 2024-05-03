@@ -3,6 +3,7 @@ import React from 'react';
 import AllParties from '../../screens/main/parties/all-parties';
 import AddParty from '../../screens/main/parties/add-party';
 import SingleParty from '../../screens/main/parties/single-party';
+import AddTransaction from '../../screens/main/parties/add-transaction';
 
 type Props = {};
 
@@ -17,6 +18,7 @@ const PartiesStack = (props: Props) => {
 			<Screen name="AllParties" component={AllParties} />
 			<Screen name="AddParty" component={AddParty} />
 			<Screen name="SingleParty" component={SingleParty} />
+			<Screen name="AddTransaction" component={AddTransaction} />
 		</Navigator>
 	);
 };

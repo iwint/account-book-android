@@ -18,12 +18,14 @@ interface HeaderProps {
 	color?: string;
 	profileData?: any;
 	rightIconColor?: string;
+	elevation?: number;
 }
 
 const Header: React.FC<HeaderProps> = ({
 	showBackAction,
 	rightActionIcon,
 	title,
+	elevation,
 	leftActionOnPress,
 	leftActionIcon,
 	rightActionOnPress,
@@ -54,7 +56,11 @@ const Header: React.FC<HeaderProps> = ({
 
 	return (
 		<Appbar.Header
-			style={{ backgroundColor: backgroundColor, gap: 10 }}
+			style={{
+				backgroundColor: backgroundColor,
+				gap: 10,
+				elevation: elevation,
+			}}
 		>
 			{(leftActionIcon || showBackAction) && (
 				<Appbar.Action
