@@ -1,8 +1,11 @@
-import React from 'react';
-import { PaperProvider } from 'react-native-paper';
+import React, { useEffect } from 'react';
+import { PaperProvider, Text } from 'react-native-paper';
 import MainNavigator from './navigation';
 import { theme } from './theme';
 import { NavigationContainer } from '@react-navigation/native';
+import useAppStore from './store/app-store';
+import { usePromiseTracker } from 'react-promise-tracker';
+import { View } from 'react-native';
 
 declare global {
 	namespace ReactNativePaper {
@@ -36,6 +39,31 @@ declare global {
 // };
 
 function App(): React.JSX.Element {
+	const { checkIsAuthorized, isLoading, userToken } =
+		useAppStore();
+	useEffect(() => {
+		console.log('App mounted');
+		checkIsAuthorized();
+	}, []);
+
+	if (isLoading) {
+		return (
+			<View
+				style={{
+					flex: 1,
+					height: '100%',
+					position: 'absolute',
+					width: '100%',
+					backgroundColor: '#000',
+				}}
+			>
+				<Text>Loading....</Text>
+			</View>
+		);
+	}
+
+	console.log('USERTOKEN', userToken);
+
 	return (
 		<PaperProvider theme={theme}>
 			<NavigationContainer>

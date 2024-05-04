@@ -18,7 +18,7 @@ const AddTransaction: React.FC<AddTransactionProps> = (
 	useHideBottomBar();
 	const { data, type }: any = props.route.params;
 	console.log(data, type);
-	const { user } = useAppStore();
+	const { user, addCollections, collections } = useAppStore();
 	const [values, setValue] = useState({
 		expensetype: type,
 		amount: 0,
@@ -36,7 +36,11 @@ const AddTransaction: React.FC<AddTransactionProps> = (
 			partyID: data?._id,
 			...values,
 		};
-		console.log('PAYLOAD', payload);
+		await addCollections(payload, user?._id).then((res) => {
+			if (res.status === 'ok') {
+				props.navigation.goBack();
+			}
+		});
 	};
 
 	const renderContentBasedOnType = () => {

@@ -10,9 +10,13 @@ import { theme } from '../../theme';
 import TransactionCard from '../cards/transaction-card';
 import EmptyResult from './empty-result';
 
-const TransactionTimeline = () => {
-	const data: Array<any> = [];
+interface TransactionTimelineProps {
+	data: Array<any>;
+}
 
+const TransactionTimeline: React.FC<
+	TransactionTimelineProps
+> = ({ data }) => {
 	return (
 		<ScrollView style={styles.container}>
 			<View>
