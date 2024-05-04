@@ -65,7 +65,12 @@ function App(): React.JSX.Element {
 	console.log('USERTOKEN', userToken);
 
 	return (
-		<PaperProvider theme={theme}>
+		<PaperProvider
+			theme={{
+				...theme,
+				dark: false,
+			}}
+		>
 			<NavigationContainer>
 				<MainNavigator />
 			</NavigationContainer>

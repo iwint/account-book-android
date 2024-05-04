@@ -86,6 +86,7 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 				/>
 			</View>
 			<FloatingActionButton
+				disablePromiseLoading
 				title={
 					type === 'CUSTOMER' ? 'Add Customer' : 'Add Supplier'
 				}
