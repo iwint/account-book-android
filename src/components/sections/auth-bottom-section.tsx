@@ -72,7 +72,9 @@ const BottomSection: React.FC<BottomSectionProps> = ({
 				title={type === 'sign_up' ? 'Register' : 'Sign in'}
 			/>
 			<View style={styles.bottomSectionWrapper}>
-				<Text>Don't have account ?</Text>
+				<Text style={{ color: theme.colors.text }}>
+					Don't have account ?
+				</Text>
 				<TouchableOpacity
 					onPressIn={() => {
 						console.log('SIGN IN');

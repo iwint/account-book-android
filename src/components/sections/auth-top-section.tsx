@@ -26,6 +26,7 @@ const AuthTopSection = ({
 					{
 						fontSize: 16,
 						lineHeight: 30,
+						color: '#000',
 					},
 				]}
 			>

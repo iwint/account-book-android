@@ -38,6 +38,8 @@ export const useUserStore = (set: any, get: any): useUserStoreProps => {
             await AsyncStorage.getItem('token').then((token) => {
                 if (token != null) {
                     set({ userToken: token, isLoggedIn: true, isLoading: false })
+                } else {
+                    set({ userToken: null, isLoggedIn: false, isLoading: false })
                 }
             })
         },
