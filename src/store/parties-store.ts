@@ -12,16 +12,19 @@ interface PartiesProps {
 }
 
 export interface usePartiesStoreProps {
+    party: any,
     statistics: StatisticProps;
     parties: PartiesProps;
     getAllStatistics: (userId: string, type: "SUPPLIER" | 'CUSTOMER') => Promise<any>;
     getAllParties: (userId: string, type: "SUPPLIER" | 'CUSTOMER') => Promise<any>;
     getStaticId: (type: "SUPPLIER" | 'CUSTOMER') => string;
     addParty: (userId: string, data: any) => Promise<any>;
+    getPartyById: (partyId: string, userId: string) => Promise<any>
 }
 
 export const usePartiesStore = (set: any, get: any): usePartiesStoreProps => {
     return {
+        party: null,
         parties: {} as PartiesProps,
         statistics: {} as StatisticProps,
         getAllStatistics: (userId, type) => {
@@ -94,6 +97,20 @@ export const usePartiesStore = (set: any, get: any): usePartiesStoreProps => {
                     reject(err);
                 });
             });
+        },
+        getPartyById: (partyId, userId) => {
+            return new Promise((resolve, reject) => {
+                GET_API(`party/getinit/${partyId}?userid=${userId}`).then((response: any) => {
+                    if (response.data) {
+                        set({
+                            party: response.data
+                        })
+                        resolve(response.data)
+                    } else {
+                        reject(response)
+                    }
+                }).catch(err => reject(err))
+            })
         }
     };
 };

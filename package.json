@@ -29,6 +29,7 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-timeline-flatlist": "^0.8.0",
     "react-native-vector-icons": "^10.0.3",
+    "react-navigation": "^5.0.0",
     "react-promise-tracker": "^2.1.1",
     "zustand": "^4.5.2"
   },

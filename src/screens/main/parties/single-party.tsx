@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useHideBottomBar } from '../../../hooks/use-hide-bottom-bar';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Header from '../../../components/common/header';
@@ -7,11 +7,20 @@ import { theme } from '../../../theme';
 import TotalAmountStat from '../../../components/sections/single-party-total-stat';
 import Button from '../../../components/buttons/button';
 import TransactionTimeline from '../../../components/sections/transaction-timeline';
+import useAppStore from '../../../store/app-store';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface SinglePartyProps extends NativeStackScreenProps<any> {}
 
 const SingleParty: React.FC<SinglePartyProps> = (props) => {
 	const data = props.route.params?.data;
+	const { getAllCollections, collections, user } = useAppStore();
+	useFocusEffect(
+		useCallback(() => {
+			getAllCollections(data._id, user._id);
+		}, []),
+	);
+	console.log(collections);
 
 	useHideBottomBar();
 	return (
@@ -33,11 +42,11 @@ const SingleParty: React.FC<SinglePartyProps> = (props) => {
 			/>
 			<View style={styles.topWrapper}>
 				<TotalAmountStat
-					type="CREDIT"
-					totalAmount={data?.totalAmount || 0}
+					type={data?.expensetype}
+					totalAmount={data?.amount || 0}
 				/>
 			</View>
-			<TransactionTimeline />
+			<TransactionTimeline data={collections[data?._id]} />
 			<View style={styles.buttonWrapper}>
 				<Button
 					title="You gave ₹"
