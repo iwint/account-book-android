@@ -12,11 +12,12 @@ import EmptyResult from './empty-result';
 
 interface TransactionTimelineProps {
 	data: Array<any>;
+	onTransactionPress: (e: Event) => void;
 }
 
 const TransactionTimeline: React.FC<
 	TransactionTimelineProps
-> = ({ data }) => {
+> = ({ data, onTransactionPress }) => {
 	return (
 		<ScrollView style={styles.container}>
 			<View>
@@ -42,7 +43,7 @@ const TransactionTimeline: React.FC<
 					renderDetail={(rowData) => {
 						return <TransactionCard data={rowData} />;
 					}}
-					onEventPress={() => {}}
+					onEventPress={onTransactionPress}
 					columnFormat="single-column-left"
 					descriptionStyle={styles.descriptionStyle}
 					timeContainerStyle={styles.timeContainerStyle}

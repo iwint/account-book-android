@@ -18,7 +18,7 @@ export const useCollectionsStore = (set: any, get: any): useCollectionsStoreProp
                         set({
                             collections: {
                                 ...get().collections,
-                                [data?.partyId]: [...get().collections[data?.partyId], data]
+                                [data?.partyID]: [...get().collections[data?.partyID], data]
                             }
                         })
                         resolve(response)
@@ -48,6 +48,8 @@ export const useCollectionsStore = (set: any, get: any): useCollectionsStoreProp
             })
         },
         deleteCollection: (collectionId, userId, partyId) => {
+            console.log("PARTY ID", partyId);
+
             return new Promise((resolve, reject) => {
                 DELETE_API(`collection/delete/${collectionId}?userid=${userId}&partyID=${partyId}`).then((response: any) => {
                     let existing = [...get().collections[partyId]]
@@ -67,16 +69,22 @@ export const useCollectionsStore = (set: any, get: any): useCollectionsStoreProp
         updateCollection: (collectionId, userId, data) => {
             return new Promise((resolve, reject) => {
                 PUT_API(`collection/update/${collectionId}?userid=${userId}`, data).then((response: any) => {
-                    if (response.status === 'ok') {
-                        let existing = [...get().collections[data?.partyId]]
+                    console.log("RESSS", response);
+
+                    if (response?.status === 'ok') {
+                        console.log("RESSS", data);
+
+                        let existing = [...get().collections[data?.partyID]]
                         let updated = existing.map((item: any) => item._id === collectionId ? data : item)
                         set({
                             collections: {
                                 ...get().collections,
-                                [data?.partyId]: updated
+                                [data?.partyID]: updated
                             }
                         })
                         resolve(response)
+                    } else {
+                        reject(response)
                     }
                 }).catch(err => reject(err))
             })

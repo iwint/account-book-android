@@ -18,12 +18,16 @@ interface AddPartyProps extends NativeStackScreenProps<any> {}
 
 const AddParty: React.FC<AddPartyProps> = (props) => {
 	const theme = useTheme();
+	const data = props.route.params?.data;
+
 	useHideBottomBar();
-	const { getStaticId, addParty, user } = useAppStore();
+	const { getStaticId, addParty, user, updateParty } =
+		useAppStore();
 	const [values, setValue] = useState({
-		type: '',
-		partyname: '',
-		phone: '',
+		type: data?.type || '',
+		partyname: data?.partyname || '',
+		phone: data?.phone || '',
+		...data,
 	});
 	const handleSetValue = (name: string, value: string) => {
 		setValue({ ...values, [name]: value });
@@ -35,10 +39,25 @@ const AddParty: React.FC<AddPartyProps> = (props) => {
 				values.type as 'CUSTOMER' | 'SUPPLIER',
 			),
 		};
-		await addParty(user?._id, payload).then((res) => {
-			ToastAndroid.show(res?.message, ToastAndroid.SHORT);
-			props.navigation.goBack();
-		});
+		if (data != undefined) {
+			await updateParty(
+				data?._id,
+				user?._id,
+				payload,
+				values.type as 'CUSTOMER' | 'SUPPLIER',
+			).then((res) => {
+				ToastAndroid.show(res?.message, ToastAndroid.SHORT);
+				props.navigation.reset({
+					index: 0,
+					routes: [{ name: 'AllParties' }],
+				});
+			});
+		} else {
+			await addParty(user?._id, payload).then((res) => {
+				ToastAndroid.show(res?.message, ToastAndroid.SHORT);
+				props.navigation.goBack();
+			});
+		}
 	};
 
 	return (
@@ -46,7 +65,7 @@ const AddParty: React.FC<AddPartyProps> = (props) => {
 			<Header
 				backgroundColor={theme.colors.primary}
 				color="white"
-				title="Add Party"
+				title={data != undefined ? 'Update Party' : 'Add Party'}
 				showBackAction
 			/>
 			<View style={styles.contentWrapper}>
@@ -54,6 +73,7 @@ const AddParty: React.FC<AddPartyProps> = (props) => {
 					onChangeText={(text) =>
 						handleSetValue('partyname', text)
 					}
+					value={values.partyname}
 					mode="outlined"
 					label={'Party Name'}
 				/>
@@ -62,6 +82,7 @@ const AddParty: React.FC<AddPartyProps> = (props) => {
 					inputMode="numeric"
 					mode="outlined"
 					label={'Phone Number'}
+					value={values.phone.toString()}
 				/>
 				<View style={styles.radioButtonWrapper}>
 					<Text>Who are they ?</Text>
@@ -92,7 +113,10 @@ const AddParty: React.FC<AddPartyProps> = (props) => {
 				</View>
 			</View>
 			<View style={styles.buttonWrapper}>
-				<Button onPress={handleSubmit} title={`Add Customer`} />
+				<Button
+					onPress={handleSubmit}
+					title={data != undefined ? 'Update' : 'Add'}
+				/>
 			</View>
 		</View>
 	);

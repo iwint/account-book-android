@@ -6,8 +6,9 @@ import PartiesView from '../../../components/sections/parties-view';
 import TabView from '../../../components/sections/tab-view';
 import useAppStore from '../../../store/app-store';
 import { useFocusEffect } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type Props = {};
+interface AllPartiesProps extends NativeStackScreenProps<any> {}
 
 const routes = [
 	{
@@ -22,10 +23,13 @@ const routes = [
 	},
 ];
 
-const AllParties = (props: Props) => {
+const AllParties: React.FC<AllPartiesProps> = (props) => {
 	const theme = useTheme();
 	const styles = makeStyles(theme);
 	const { user } = useAppStore();
+	const navigateToProfile = () => {
+		props.navigation.navigate('Profile');
+	};
 	return (
 		<View style={styles.container}>
 			<Header
@@ -33,6 +37,7 @@ const AllParties = (props: Props) => {
 				backgroundColor={theme.colors.primary}
 				color={'white'}
 				profileData={user}
+				onAvatarPress={navigateToProfile}
 			/>
 			<TabView tabData={routes} />
 		</View>

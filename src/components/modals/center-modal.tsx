@@ -36,6 +36,8 @@ export const CenteredModal: React.FC<
 				return height / 2;
 			case 'sm':
 				return height / 3;
+			case 'xs':
+				return height / 4;
 			default:
 				return 'auto';
 		}

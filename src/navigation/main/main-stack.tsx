@@ -2,16 +2,18 @@ import {
 	BottomTabScreenProps,
 	createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import React, { useCallback, useEffect } from 'react';
-import { useTheme } from 'react-native-paper';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback } from 'react';
+import { IconButton, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import useAppStore from '../../store/app-store';
 import BillStack from './bills-stack';
 import ItemStack from './items-stack';
 import LoanStack from './loans-stack';
 import MoreStack from './more-stack';
 import PartiesStack from './parties-stack';
-import useAppStore from '../../store/app-store';
-import { useFocusEffect } from '@react-navigation/native';
+
+const DISABLED_ROUTES = ['Bills', 'Items', 'Loans', 'More'];
 
 const RenderTabBarIcon = ({
 	focused,
@@ -52,7 +54,35 @@ const MainStack = () => {
 			tabBarInactiveTintColor: 'gray',
 			headerShown: false,
 			tabBarHideOnKeyboard: true,
-			tabBarStyle: { height: 70, paddingBottom: 15 },
+			tabBarStyle: {
+				height: 70,
+				paddingTop: 0,
+				paddingBottom: 15,
+				width: '100%',
+			},
+			tabBarAllowFontScaling: true,
+			tabBarButton: (tabBarButtonProps: any) => {
+				return (
+					<IconButton
+						disabled={DISABLED_ROUTES.includes(route.name)}
+						{...tabBarButtonProps}
+						style={{
+							opacity: DISABLED_ROUTES.includes(route.name)
+								? 0.5
+								: 1,
+							borderRadius: 10,
+							height: '100%',
+							borderTopWidth: tabBarButtonProps
+								?.accessibilityState?.selected
+								? 1.5
+								: 0,
+							width: '17%',
+							borderTopColor: theme.colors.primary,
+						}}
+						icon={() => tabBarButtonProps.children}
+					/>
+				);
+			},
 			tabBarIcon: (tabBarIconProps: any) =>
 				RenderTabBarIcon({ ...tabBarIconProps, route }),
 		}),
@@ -66,7 +96,10 @@ const MainStack = () => {
 	);
 
 	return (
-		<Navigator initialRouteName="Parties" {...tabNavProps}>
+		<Navigator
+			initialRouteName="Parties"
+			{...(tabNavProps as any)}
+		>
 			<Screen name="Parties" component={PartiesStack} />
 			<Screen name="Bills" component={BillStack} />
 			<Screen name="Items" component={ItemStack} />

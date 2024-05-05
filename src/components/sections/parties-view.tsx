@@ -17,32 +17,6 @@ interface PartiesViewProps {
 	type: 'CUSTOMER' | 'SUPPLIER';
 }
 
-const dummyData = [
-	{
-		_id: '662504f2f666253badc9c15a',
-		staticsID: '6624f30b3e532641072e0f16',
-		customername: 'Paul',
-		phone: 9003790558,
-		type: 'SUPPLIER',
-		expensetype: 'DEBIT',
-		amount: '0',
-		createdAt: '2024-04-21T12:22:10.475Z',
-		updatedAt: '2024-04-21T12:22:10.475Z',
-		__v: 0,
-	},
-	{
-		_id: '6625080b88f831180ac996a3',
-		staticsID: '6624f30b3e532641072e0f16',
-		customername: 'Paul',
-		phone: 9003690558,
-		type: 'SUPPLIER',
-		expensetype: 'CREDIT',
-		amount: '0',
-		createdAt: '2024-04-21T12:35:23.969Z',
-		updatedAt: '2024-04-21T12:35:23.969Z',
-		__v: 0,
-	},
-];
 const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 	const theme = useTheme();
 	const styles = makeStyles(theme);
@@ -66,8 +40,10 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 	useFocusEffect(
 		useCallback(() => {
 			getUserData().then((payload) => {
-				getAllStatistics(payload?.data._id, type);
-				getAllParties(payload?.data._id, type);
+				getAllStatistics(payload?.data._id, type).then((res) => {
+					console.log(res, 'STATISTICS');
+					getAllParties(payload?.data._id, type);
+				});
 			});
 		}, [type]),
 	);

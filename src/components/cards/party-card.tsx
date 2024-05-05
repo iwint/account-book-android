@@ -83,6 +83,7 @@ const makeStyles = (theme: ThemeProps) =>
 			width: '100%',
 			backgroundColor: '#fff',
 			flexDirection: 'row',
+			borderRadius: 10,
 		},
 		title: {
 			color: theme.colors.text,
@@ -106,5 +107,7 @@ const makeStyles = (theme: ThemeProps) =>
 			justifyContent: 'flex-end',
 			width: '30%',
 			paddingHorizontal: 10,
+			borderTopRightRadius: 10,
+			borderBottomRightRadius: 10,
 		},
 	});

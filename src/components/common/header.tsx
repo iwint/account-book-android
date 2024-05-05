@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { Appbar, Avatar } from 'react-native-paper';
 import { theme } from '../../theme';
@@ -19,6 +19,7 @@ interface HeaderProps {
 	profileData?: any;
 	rightIconColor?: string;
 	elevation?: number;
+	onAvatarPress?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -35,6 +36,7 @@ const Header: React.FC<HeaderProps> = ({
 	color,
 	profileData,
 	rightIconColor,
+	onAvatarPress,
 }) => {
 	const navigation = useNavigation();
 
@@ -79,17 +81,22 @@ const Header: React.FC<HeaderProps> = ({
 				/>
 			)}
 			{profileData &&
-				(profileData?.image != null ? (
-					<Avatar.Image
-						source={profileData?.image}
-						style={{ backgroundColor: '#fff', marginLeft: 10 }}
-						size={38}
-					/>
+				(profileData?.image != null ||
+				profileData?.image?.url != null ? (
+					<Pressable onPress={onAvatarPress}>
+						<Avatar.Image
+							source={{
+								uri: profileData?.image?.url,
+							}}
+							style={{ backgroundColor: '#fff', marginLeft: 10 }}
+							size={38}
+						/>
+					</Pressable>
 				) : (
 					<Avatar.Icon
 						icon={(props) => (
 							<Icon
-								onPress={() => {}}
+								onPress={onAvatarPress}
 								{...props}
 								size={24}
 								color={theme.colors.text}

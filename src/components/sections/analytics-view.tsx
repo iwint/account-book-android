@@ -11,7 +11,9 @@ interface AnalyticsViewProps {
 	data: AnalyticsDataProps;
 }
 
-const AnalyticsView: React.FC<AnalyticsViewProps> = (props) => {
+const AnalyticsView: React.FC<AnalyticsViewProps> = ({
+	data,
+}) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.amountWrapper}>
@@ -21,7 +23,7 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = (props) => {
 						color: theme.colors.success,
 					}}
 				>
-					₹0
+					₹{data?.totalcredit || 0}
 				</Text>
 				<Text style={styles.subTitle}>You will give</Text>
 			</View>
@@ -29,7 +31,7 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = (props) => {
 				<Text
 					style={{ ...styles.title, color: theme.colors.error }}
 				>
-					₹0
+					₹{data?.totaldebit || 0}
 				</Text>
 				<Text style={styles.subTitle}>You will give</Text>
 			</View>

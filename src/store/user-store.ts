@@ -12,7 +12,8 @@ export interface useUserStoreProps {
     isLoading: boolean,
     authenticateUser: (endpoint: Routes, payload: UserLoginPayload | UserRegisterPayload) => Promise<any>,
     getUserData: () => Promise<any>,
-    checkIsAuthorized: () => Promise<void>
+    checkIsAuthorized: () => Promise<void>,
+    logOutUser: () => Promise<any>
 }
 
 export const useUserStore = (set: any, get: any): useUserStoreProps => {
@@ -54,7 +55,21 @@ export const useUserStore = (set: any, get: any): useUserStoreProps => {
                     }
                 })
             })
+        },
+        logOutUser: () => {
+            return new Promise((resolve, reject) => {
+                AsyncStorage.clear().then(() => {
+                    set({
+                        userToken: null,
+                        isLoggedIn: false,
+                        isLoading: false
+                    })
+                })
+                resolve(true)
+
+            }).catch(() => { })
         }
+
 
     }
 } 
