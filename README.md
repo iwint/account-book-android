@@ -20,13 +20,13 @@ To get started with this project, follow these steps:
 
    ```
    # bash
-   git clone https://github.com/your-account-book-react-native-project.git
+   git clone [https://github.com/your-account-book-react-native-project.git](https://github.com/iwint/account-book.git)
    ```
 
 2. **Install Dependencies** : Navigate to the project directory and install the required dependencies using npm or yarn.
 
    ```
-   cd your-account-book-react-native-project
+   cd account-book
    npm install
    # or
    yarn install
