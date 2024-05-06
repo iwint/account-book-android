@@ -67,7 +67,6 @@ export const usePartiesStore = (set: any, get: any): usePartiesStoreProps => {
             });
         },
         getStaticId: (type) => {
-            console.log(get().statistics);
 
             return get().statistics[type === "CUSTOMER" ? "customers_statistics" : "suppliers_statistics"]?._id
         },

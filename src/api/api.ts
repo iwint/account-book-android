@@ -1,13 +1,9 @@
-// import { ROUTE_BASE_URL } from '@env'
+import { ROUTE_BASE_URL } from '@env'
 import axios from "axios"
 import { ToastAndroid } from "react-native"
 import { trackPromise } from "react-promise-tracker"
 import { getAuthToken } from "../utils/storage-funtions"
 import { Routes } from "./request.type"
-
-const ROUTE_BASE_URL = 'https://b94b-2409-408d-e80-1226-9876-4ea1-83e5-8128.ngrok-free.app'
-
-console.log("ROUTE_BASE_URL", ROUTE_BASE_URL);
 
 
 const BASE_URL = `${ROUTE_BASE_URL}/api/v1`

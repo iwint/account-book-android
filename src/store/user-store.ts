@@ -3,8 +3,6 @@ import { User, UserLoginPayload, UserRegisterPayload } from "../@types/user"
 import { GET_API, POST_API } from "../api/api"
 import { Routes } from "../api/request.type"
 
-
-
 export interface useUserStoreProps {
     user: User,
     userToken: string | null,
