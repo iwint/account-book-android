@@ -8,8 +8,6 @@ This React Native project is designed to help you manage your accounts on the go
     <img src="./image/README/1715067606406.png" style="width:250px; height:500px" />
     <img src="./image/README/1715067642598.png" style="width:250px; height:500px" />
     <img src="./image/README/1715067656705.png" style="width:250px; height:500px" />
-    <img src="./image/README/1715067675382.png" style="width:250px; height:500px" />
-    <img src="./image/README/1715067689516.png" style="width:250px; height:500px" />
 </div>
   
 ### Features
