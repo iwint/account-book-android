@@ -41,6 +41,7 @@ declare global {
 function App(): React.JSX.Element {
 	const { checkIsAuthorized, isLoading, userToken } =
 		useAppStore();
+
 	useEffect(() => {
 		console.log('App mounted');
 		checkIsAuthorized();

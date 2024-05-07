@@ -22,7 +22,6 @@ To get started with this project, follow these steps:
    # bash
    git clone https://github.com/iwint/account-book.git
    ```
-
 2. **Install Dependencies** : Navigate to the project directory and install the required dependencies using npm or yarn.
 
    ```
@@ -31,7 +30,6 @@ To get started with this project, follow these steps:
    # or
    yarn install
    ```
-
 3. **Run the Application** : Start the Metro bundler and run the application on your preferred platform (iOS/Android).
 
    ```
@@ -41,7 +39,6 @@ To get started with this project, follow these steps:
    # For Android
    npx react-native run-android
    ```
-
 4. **Start Managing Your Accounts** : Once the application is running on your device or emulator, you can start adding customers, suppliers, and recording expenses.
 
 ### Usage
