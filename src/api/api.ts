@@ -20,7 +20,7 @@ export const GET_API = async (endpoint: Routes) => {
     const token = await getAuthToken()
     console.log("TOKEN", token);
 
-    return trackPromise(new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         axios.get(`${BASE_URL}/${endpoint}`, {
             headers: {
                 ...headers,
@@ -42,7 +42,7 @@ export const GET_API = async (endpoint: Routes) => {
             reject(err)
         }
         )
-    }))
+    })
 }
 
 export const POST_API = async (endpoint: string, data: any) => {

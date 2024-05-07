@@ -36,7 +36,7 @@ const TransactionTimeline: React.FC<
 						data?.map((item) => {
 							return {
 								...item,
-								time: item?.date,
+								time: new Date(item.date).toDateString(),
 							};
 						})
 					}

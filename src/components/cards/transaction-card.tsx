@@ -14,7 +14,9 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 	return (
 		<View style={styles.container}>
 			<View style={styles.leftSection}>
-				<Text style={styles.text}>{data?.createdAt}</Text>
+				<Text style={styles.text}>
+					{new Date(data?.createdAt).toDateString()}
+				</Text>
 				<Text
 					style={{
 						...styles.text,

@@ -4,6 +4,7 @@ import { Appbar, Avatar } from 'react-native-paper';
 import { theme } from '../../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import { usePromiseTracker } from 'react-promise-tracker';
 
 interface HeaderProps {
 	showBackAction?: boolean;
@@ -39,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({
 	onAvatarPress,
 }) => {
 	const navigation = useNavigation();
-
+	const { promiseInProgress } = usePromiseTracker();
 	const handleRightAction = () => {
 		if (headerAction === 'settings') {
 			navigation.navigate({ name: 'Settings' } as never);
@@ -80,6 +81,7 @@ const Header: React.FC<HeaderProps> = ({
 					onPress={handleLeftAction}
 				/>
 			)}
+			
 			{profileData &&
 				(profileData?.image != null ||
 				profileData?.image?.url != null ? (

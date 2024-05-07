@@ -12,6 +12,8 @@ import PartyCard from '../cards/party-card';
 import Input from '../inputs/text-input';
 import EmptyResult from './empty-result';
 import useAppStore from '../../store/app-store';
+import { usePromiseTracker } from 'react-promise-tracker';
+import { Skeleton } from '@rneui/base';
 
 interface PartiesViewProps {
 	type: 'CUSTOMER' | 'SUPPLIER';
@@ -21,6 +23,7 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 	const theme = useTheme();
 	const styles = makeStyles(theme);
 	const navigation = useNavigation();
+	const { promiseInProgress } = usePromiseTracker();
 	const {
 		getAllStatistics,
 		statistics,
@@ -33,8 +36,10 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 		navigation.getParent()?.navigate('AddParty', { type });
 	};
 
-	const navigateToSingleParty = (data: string) => {
-		navigation.getParent()?.navigate('SingleParty', { data });
+	const navigateToSingleParty = (data: any) => {
+		navigation
+			.getParent()
+			?.navigate('SingleParty', { id: data?._id });
 	};
 
 	useFocusEffect(
@@ -82,36 +87,42 @@ const PartiesView: React.FC<PartiesViewProps> = ({ type }) => {
 				</View>
 			</View>
 			<View style={styles.cardListWrapper}>
-				<FlatList
-					ListEmptyComponent={<EmptyResult />}
-					data={
-						parties[
-							type === 'CUSTOMER' ? 'customer' : 'supplier'
-						]
-					}
-					contentContainerStyle={{
-						gap: 5,
-						paddingHorizontal: 5,
-						paddingBottom: 60,
-					}}
-					renderItem={({ item, index }) => {
-						console.log('ITEM', item, parties);
-						return (
-							<PartyCard
-								key={index}
-								status={item.expensetype as any}
-								onPress={() =>
-									navigateToSingleParty(item as any)
-								}
-								data={{
-									party_name: item?.partyname,
-									date: item?.createdAt,
-									amount: item?.amount,
-								}}
-							/>
-						);
-					}}
-				/>
+				{promiseInProgress ? (
+					<View style={{ gap: 5, paddingHorizontal: 10 }}>
+						<Skeleton height={80} animation="wave" />
+						<Skeleton height={80} animation="wave" />
+						<Skeleton height={80} animation="wave" />
+						<Skeleton height={80} animation="wave" />
+					</View>
+				) : (
+					<FlatList
+						ListEmptyComponent={<EmptyResult />}
+						data={
+							parties[
+								type === 'CUSTOMER' ? 'customer' : 'supplier'
+							]
+						}
+						contentContainerStyle={{
+							gap: 5,
+							paddingHorizontal: 5,
+							paddingBottom: 60,
+						}}
+						renderItem={({ item, index }) => {
+							return (
+								<PartyCard
+									key={index}
+									status={item.expensetype as any}
+									onPress={() => navigateToSingleParty(item)}
+									data={{
+										party_name: item?.partyname,
+										date: item?.createdAt,
+										amount: item?.amount,
+									}}
+								/>
+							);
+						}}
+					/>
+				)}
 			</View>
 		</View>
 	);

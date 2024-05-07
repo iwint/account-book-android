@@ -5,17 +5,22 @@ export function useHideBottomBar() {
 	const navigation = useNavigation();
 
 	useEffect(() => {
-		navigation.getParent()?.setOptions({
-			tabBarStyle: { display: 'none' },
-			tabBarVisible: true,
+		navigation.addListener('focus', () => {
+			navigation.getParent()?.setOptions({
+				tabBarStyle: { display: 'none' },
+				tabBarVisible: true,
+			});
 		});
-		return () =>
+		navigation.addListener('blur', () => {
 			navigation.getParent()?.setOptions({
 				tabBarStyle: {
-					height: 75,
-					paddingTop: 10,
+					height: 70,
+					paddingTop: 0,
 					paddingBottom: 15,
+					width: '100%',
 				},
+				tabBarVisible: false,
 			});
+		});
 	}, [navigation]);
 }

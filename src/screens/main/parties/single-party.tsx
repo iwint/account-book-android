@@ -18,18 +18,35 @@ import {
 	Menu,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {
+	trackPromise,
+	usePromiseTracker,
+} from 'react-promise-tracker';
+import { Skeleton } from '@rneui/base';
 
 interface SinglePartyProps extends NativeStackScreenProps<any> {}
 
 const SingleParty: React.FC<SinglePartyProps> = (props) => {
-	const data = props.route.params?.data;
+	useHideBottomBar();
+	const partyId = props.route.params?.id;
 	const [showModal, setShowModal] = React.useState(false);
 	const [showMenu, setShowMenu] = React.useState(false);
-	const { getAllCollections, collections, user, deleteParty } =
-		useAppStore();
+	const { promiseInProgress } = usePromiseTracker();
+	const {
+		getAllCollections,
+		collections,
+		user,
+		party,
+		deleteParty,
+		getPartyById,
+	} = useAppStore();
 	useFocusEffect(
 		useCallback(() => {
-			getAllCollections(data._id, user._id);
+			trackPromise(
+				getPartyById(partyId, user._id).then(() => {
+					getAllCollections(partyId, user._id);
+				}),
+			);
 		}, []),
 	);
 	const handleMenu = useCallback(
@@ -38,25 +55,26 @@ const SingleParty: React.FC<SinglePartyProps> = (props) => {
 	);
 	const navigateToUpdateParty = () => {
 		setShowMenu(false);
-		props.navigation.navigate('AddParty', { data });
+		props.navigation.navigate('AddParty', { data: party });
 	};
 	const navigateToUpdateTransaction = (collectionData: any) => {
 		props.navigation.navigate('AddTransaction', {
-			data: data,
+			data: party,
 			type: collectionData.expensetype,
 			collectionData: collectionData,
 		});
 	};
 	const toggleModal = () => setShowModal(!showModal);
 	const handleDelete = useCallback(() => {
-		deleteParty(data._id, user._id, data?.type).then((res) => {
+		deleteParty(party._id, user._id, party?.type).then((res) => {
 			if (res.status === 'ok') {
 				toggleModal();
 				props.navigation.navigate('AllParties');
 			}
 		});
 	}, []);
-	useHideBottomBar();
+	console.log(party, 'PARTY');
+
 	return (
 		<View style={styles.container}>
 			<CenteredModal
@@ -74,8 +92,10 @@ const SingleParty: React.FC<SinglePartyProps> = (props) => {
 			<Header
 				title={
 					<View>
-						<Text style={styles.title}>{data.partyname}</Text>
-						<Text style={styles.subTitle}>{data.phone}</Text>
+						<Text style={styles.title}>{party?.partyname}</Text>
+						{party?.phone && (
+							<Text style={styles.subTitle}>{party?.phone}</Text>
+						)}
 					</View>
 				}
 				backgroundColor={theme.colors.primary}
@@ -118,21 +138,38 @@ const SingleParty: React.FC<SinglePartyProps> = (props) => {
 				}
 				showBackAction
 				rightIconColor={'#fff'}
-				profileData={data}
+				profileData={party}
 			/>
 
 			<View style={styles.topWrapper}>
 				<TotalAmountStat
-					type={data?.expensetype}
-					totalAmount={data?.amount || 0}
+					type={party?.expensetype}
+					totalAmount={party?.amount || 0}
 				/>
 			</View>
-			<TransactionTimeline
-				onTransactionPress={(collectionData) =>
-					navigateToUpdateTransaction(collectionData)
-				}
-				data={collections[data?._id]}
-			/>
+			{promiseInProgress ? (
+				<View
+					style={{
+						gap: 5,
+						padding: 10,
+						height: '70%',
+					}}
+				>
+					<Skeleton height={80} animation="wave" />
+					<Skeleton height={80} animation="wave" />
+					<Skeleton height={80} animation="wave" />
+					<Skeleton height={80} animation="wave" />
+					<Skeleton height={80} animation="wave" />
+					<Skeleton height={80} animation="wave" />
+				</View>
+			) : (
+				<TransactionTimeline
+					onTransactionPress={(collectionData) =>
+						navigateToUpdateTransaction(collectionData)
+					}
+					data={collections[party?._id]}
+				/>
+			)}
 			<View style={styles.buttonWrapper}>
 				<Button
 					title="You gave ₹"
@@ -143,7 +180,7 @@ const SingleParty: React.FC<SinglePartyProps> = (props) => {
 					}}
 					onPress={() =>
 						props.navigation.navigate('AddTransaction', {
-							data: data,
+							data: party,
 							type: 'DEBIT',
 						})
 					}
@@ -158,7 +195,7 @@ const SingleParty: React.FC<SinglePartyProps> = (props) => {
 					}}
 					onPress={() =>
 						props.navigation.navigate('AddTransaction', {
-							data: data,
+							data: party,
 							type: 'CREDIT',
 						})
 					}

@@ -7,6 +7,8 @@ import TabView from '../../../components/sections/tab-view';
 import useAppStore from '../../../store/app-store';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { usePromiseTracker } from 'react-promise-tracker';
+import { Skeleton } from '@rneui/base';
 
 interface AllPartiesProps extends NativeStackScreenProps<any> {}
 
@@ -26,6 +28,7 @@ const routes = [
 const AllParties: React.FC<AllPartiesProps> = (props) => {
 	const theme = useTheme();
 	const styles = makeStyles(theme);
+	const { promiseInProgress } = usePromiseTracker();
 	const { user } = useAppStore();
 	const navigateToProfile = () => {
 		props.navigation.navigate('Profile');
